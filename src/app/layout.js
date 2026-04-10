@@ -21,6 +21,16 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "OnlineShop | Modern E-commerce",
   description: "High-quality products at your fingertips",
+  icons: {
+    icon: [
+      {
+        url: "/favicon.ico", // This is the fallback
+      },
+      // You can add more formats here if needed
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({ children }) {
