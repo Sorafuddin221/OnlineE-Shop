@@ -1,16 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Filter, SlidersHorizontal, Loader2, Search, X, ChevronRight, CornerDownRight } from "lucide-react";
 import ProductCard from "@/components/common/ProductCard";
-import SectionHeader from "@/components/common/SectionHeader";
 import { getProducts } from "@/services/productService";
 import { getAllCategories } from "@/services/categoryService";
 import { cn } from "@/utils/cn";
 import { nestCategories } from "@/utils/categoryHelper";
 
-export default function ProductsPage() {
+function ProductsList() {
   const searchParams = useSearchParams();
   const keyword = searchParams.get("keyword") || "";
   const initialCategoryName = searchParams.get("category") || "";
@@ -91,7 +90,9 @@ export default function ProductsPage() {
           {cat.name}
         </span>
         {cat.children?.length > 0 && (
-          <ChevronRight size={12} className={cn("opacity-40 transition-transform", activeCategory === cat._id && "rotate-90")} />
+          <div className={cn("transition-transform", activeCategory === cat._id && "rotate-90")}>
+            <ChevronRight size={12} className="opacity-40" />
+          </div>
         )}
       </button>
       {cat.children?.length > 0 && (
@@ -241,5 +242,17 @@ export default function ProductsPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="animate-spin text-blue-600" size={40} />
+      </div>
+    }>
+      <ProductsList />
+    </Suspense>
   );
 }
