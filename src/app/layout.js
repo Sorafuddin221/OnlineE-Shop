@@ -28,9 +28,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <title>OnlineShop | Modern E-commerce</title>
-        <meta name="description" content="High-quality products at your fingertips" />
-        <link rel="icon" href="/favicon.ico" />
+        {/* We leave the head mostly empty here so UserProvider can manage dynamic metadata like Favicon and Title */}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-gray-900`}>
         <StoreProvider>

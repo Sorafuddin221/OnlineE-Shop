@@ -24,21 +24,29 @@ export default function UserProvider({ children }) {
 
   useEffect(() => {
     if (settings) {
+      // 1. Update Title
       if (settings.siteTitle) {
         document.title = settings.siteTitle;
       }
+
+      // 2. Update Favicon
       if (settings.faviconUrl) {
-        // Update existing favicon instead of removing it
-        let link = document.querySelector("link[rel*='icon']");
-        
-        if (!link) {
-          link = document.createElement('link');
-          link.rel = 'shortcut icon';
-          document.getElementsByTagName('head')[0].appendChild(link);
-        }
-        
+        // Remove ALL existing favicon tags to prevent conflicts
+        const existingIcons = document.querySelectorAll("link[rel*='icon']");
+        existingIcons.forEach(icon => icon.parentNode.removeChild(icon));
+
+        // Create new dynamic link
+        const link = document.createElement('link');
+        link.rel = 'icon';
         link.type = 'image/x-icon';
         link.href = settings.faviconUrl;
+        document.getElementsByTagName('head')[0].appendChild(link);
+        
+        // Also add shortcut icon for better compatibility
+        const shortcut = document.createElement('link');
+        shortcut.rel = 'shortcut icon';
+        shortcut.href = settings.faviconUrl;
+        document.getElementsByTagName('head')[0].appendChild(shortcut);
       }
     }
   }, [settings]);
