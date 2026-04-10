@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import AdminSidebar from "@/components/admin/Sidebar";
@@ -10,24 +10,31 @@ import { Search, User, Loader2 } from "lucide-react";
 export default function AdminLayout({ children }) {
   const router = useRouter();
   const { user, isAuthenticated, loading } = useSelector((state) => state.user);
+  const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
-    // If not loading and either not authenticated or not an admin, redirect
+    // If loading is finished, perform the check
     if (!loading) {
       if (!isAuthenticated) {
-        router.push("/login");
+        router.replace("/login");
       } else if (user && user.role !== "admin") {
-        router.push("/");
+        router.replace("/");
+      } else {
+        // User is authenticated and is an admin
+        setIsChecking(false);
       }
     }
   }, [isAuthenticated, user, loading, router]);
 
-  // Show loading while checking authentication
-  if (loading || !isAuthenticated || (user && user.role !== "admin")) {
+  // If we are still loading the user state OR we are in the middle of checking/redirecting
+  if (loading || isChecking || !isAuthenticated || (user && user.role !== "admin")) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
-        <Loader2 className="animate-spin text-blue-600 mb-4" size={40} />
-        <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Verifying Admin Access...</p>
+        <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-3xl flex items-center justify-center mb-6 animate-pulse">
+          <Loader2 className="animate-spin" size={32} />
+        </div>
+        <h3 className="text-xl font-black text-gray-900 mb-2">Security Check</h3>
+        <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">Verifying Administrative Privileges...</p>
       </div>
     );
   }
@@ -56,11 +63,13 @@ export default function AdminLayout({ children }) {
             <div className="flex items-center gap-4 group cursor-pointer">
               <div className="text-right">
                 <p className="text-sm font-black text-gray-900 leading-tight">{user?.name || "Admin User"}</p>
-                <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">{user?.role === 'admin' ? 'Super Admin' : user?.role}</p>
+                <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">
+                  {user?.role === 'admin' ? 'Super Admin' : 'Administrator'}
+                </p>
               </div>
-              <div className="bg-blue-600 p-2.5 rounded-2xl text-white shadow-lg shadow-blue-200 group-hover:rotate-6 transition-all">
+              <div className="bg-blue-600 p-2.5 rounded-2xl text-white shadow-lg shadow-blue-200 group-hover:rotate-6 transition-all overflow-hidden w-11 h-11 flex items-center justify-center">
                 {user?.avatar?.url ? (
-                  <img src={user.avatar.url} alt={user.name} className="w-5 h-5 rounded-full object-cover" />
+                  <img src={user.avatar.url} alt={user.name} className="w-full h-full object-cover" />
                 ) : (
                   <User size={20} />
                 )}
