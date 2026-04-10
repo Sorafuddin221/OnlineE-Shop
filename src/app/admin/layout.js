@@ -1,10 +1,37 @@
 "use client";
 
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 import AdminSidebar from "@/components/admin/Sidebar";
 import NotificationBell from "@/components/admin/NotificationBell";
-import { Search, User } from "lucide-react";
+import { Search, User, Loader2 } from "lucide-react";
 
 export default function AdminLayout({ children }) {
+  const router = useRouter();
+  const { user, isAuthenticated, loading } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    // If not loading and either not authenticated or not an admin, redirect
+    if (!loading) {
+      if (!isAuthenticated) {
+        router.push("/login");
+      } else if (user && user.role !== "admin") {
+        router.push("/");
+      }
+    }
+  }, [isAuthenticated, user, loading, router]);
+
+  // Show loading while checking authentication
+  if (loading || !isAuthenticated || (user && user.role !== "admin")) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+        <Loader2 className="animate-spin text-blue-600 mb-4" size={40} />
+        <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Verifying Admin Access...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen bg-gray-50/50">
       <AdminSidebar />
@@ -28,11 +55,15 @@ export default function AdminLayout({ children }) {
             
             <div className="flex items-center gap-4 group cursor-pointer">
               <div className="text-right">
-                <p className="text-sm font-black text-gray-900 leading-tight">Admin User</p>
-                <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">Super Admin</p>
+                <p className="text-sm font-black text-gray-900 leading-tight">{user?.name || "Admin User"}</p>
+                <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">{user?.role === 'admin' ? 'Super Admin' : user?.role}</p>
               </div>
               <div className="bg-blue-600 p-2.5 rounded-2xl text-white shadow-lg shadow-blue-200 group-hover:rotate-6 transition-all">
-                <User size={20} />
+                {user?.avatar?.url ? (
+                  <img src={user.avatar.url} alt={user.name} className="w-5 h-5 rounded-full object-cover" />
+                ) : (
+                  <User size={20} />
+                )}
               </div>
             </div>
           </div>
