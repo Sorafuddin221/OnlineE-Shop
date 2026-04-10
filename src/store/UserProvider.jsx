@@ -33,20 +33,27 @@ export default function UserProvider({ children }) {
       if (settings.faviconUrl) {
         // Remove ALL existing favicon tags to prevent conflicts
         const existingIcons = document.querySelectorAll("link[rel*='icon']");
-        existingIcons.forEach(icon => icon.parentNode.removeChild(icon));
+        existingIcons.forEach(icon => {
+          if (icon && icon.parentNode) {
+            icon.parentNode.removeChild(icon);
+          }
+        });
 
-        // Create new dynamic link
-        const link = document.createElement('link');
-        link.rel = 'icon';
-        link.type = 'image/x-icon';
-        link.href = settings.faviconUrl;
-        document.getElementsByTagName('head')[0].appendChild(link);
-        
-        // Also add shortcut icon for better compatibility
-        const shortcut = document.createElement('link');
-        shortcut.rel = 'shortcut icon';
-        shortcut.href = settings.faviconUrl;
-        document.getElementsByTagName('head')[0].appendChild(shortcut);
+        const head = document.getElementsByTagName('head')[0];
+        if (head) {
+          // Create new dynamic link
+          const link = document.createElement('link');
+          link.rel = 'icon';
+          link.type = 'image/x-icon';
+          link.href = settings.faviconUrl;
+          head.appendChild(link);
+          
+          // Also add shortcut icon for better compatibility
+          const shortcut = document.createElement('link');
+          shortcut.rel = 'shortcut icon';
+          shortcut.href = settings.faviconUrl;
+          head.appendChild(shortcut);
+        }
       }
     }
   }, [settings]);
