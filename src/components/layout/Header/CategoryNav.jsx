@@ -122,7 +122,7 @@ export default function CategoryNav() {
 
         <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.2em]">
           <span className="text-gray-400">Special Offers:</span>
-          <Link href="/offers" className="bg-red-50 text-red-600 px-3 py-1 rounded-full hover:bg-red-600 hover:text-white transition-colors duration-300">
+          <Link href="/products" className="bg-red-50 text-red-600 px-3 py-1 rounded-full hover:bg-red-600 hover:text-white transition-colors duration-300">
             Up to 50% Off
           </Link>
         </div>
