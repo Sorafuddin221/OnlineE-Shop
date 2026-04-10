@@ -42,8 +42,8 @@ export default function AdminSidebar() {
   };
 
   return (
-    <aside className="w-72 bg-gray-900 h-screen sticky top-0 flex flex-col border-r border-gray-800 shadow-2xl">
-      <div className="p-8">
+    <aside className="w-72 bg-gray-900 h-screen sticky top-0 flex flex-col border-r border-gray-800 shadow-2xl shrink-0">
+      <div className="p-8 shrink-0">
         <Link href="/" className="flex items-center gap-3 group">
           <div className="bg-blue-600 p-2 rounded-xl group-hover:rotate-12 transition-all duration-300">
             <Settings size={22} className="text-white" />
@@ -54,7 +54,7 @@ export default function AdminSidebar() {
         </Link>
       </div>
 
-      <nav className="flex-1 px-4 space-y-2 py-4">
+      <nav className="flex-1 px-4 space-y-2 py-4 overflow-y-auto custom-scrollbar">
         {menuItems.map((item) => {
           const isActive = pathname === item.href;
           return (
@@ -78,7 +78,7 @@ export default function AdminSidebar() {
         })}
       </nav>
 
-      <div className="p-4 border-t border-gray-800">
+      <div className="p-4 border-t border-gray-800 shrink-0">
         <button
           onClick={handleLogout}
           className="flex items-center gap-3 w-full px-4 py-3.5 text-gray-400 hover:bg-red-500/10 hover:text-red-500 rounded-2xl transition-all duration-300 group"
