@@ -1,3 +1,5 @@
+"use client";
+
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import StoreProvider from "@/store/StoreProvider";
@@ -7,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "@/components/layout/Header/Header";
 import Footer from "@/components/layout/Footer";
 import ChatWidget from "@/components/common/ChatWidget";
+import { usePathname } from "next/navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,33 +21,26 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = {
-  title: "OnlineShop | Modern E-commerce",
-  description: "High-quality products at your fingertips",
-  icons: {
-    icon: [
-      {
-        url: "/favicon.ico", // This is the fallback
-      },
-      // You can add more formats here if needed
-    ],
-    shortcut: "/favicon.ico",
-    apple: "/favicon.ico",
-  },
-};
-
 export default function RootLayout({ children }) {
+  const pathname = usePathname();
+  const isAdminPath = pathname.startsWith("/admin");
+
   return (
     <html lang="en">
+      <head>
+        <title>OnlineShop | Modern E-commerce</title>
+        <meta name="description" content="High-quality products at your fingertips" />
+        <link rel="icon" href="/favicon.ico" />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-gray-900`}>
         <StoreProvider>
           <UserProvider>
-            <Header />
+            {!isAdminPath && <Header />}
             <main className="min-h-screen">
               {children}
             </main>
-            <Footer />
-            <ChatWidget />
+            {!isAdminPath && <Footer />}
+            {!isAdminPath && <ChatWidget />}
             <ToastContainer position="bottom-center" autoClose={3000} />
           </UserProvider>
         </StoreProvider>
