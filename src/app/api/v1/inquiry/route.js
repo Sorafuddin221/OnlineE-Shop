@@ -9,7 +9,7 @@ export async function POST(req) {
     const body = await req.json();
     const { product, name, email, phone, message } = body;
 
-    if (!product || !name || !email || !message) {
+    if (!name || !email || !message) {
       return NextResponse.json(
         { success: false, message: "Please fill all required fields" },
         { status: 400 }

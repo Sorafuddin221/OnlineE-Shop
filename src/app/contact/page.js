@@ -1,11 +1,58 @@
-import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
+"use client";
 
-export const metadata = {
-  title: "Contact Us - Online Shop",
-  description: "Get in touch with Online Shop for all your decoration and event rental needs in Dhaka. We are here to help you plan your next big event.",
-};
+import { MapPin, Phone, Mail, Clock, Send, Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 export default function ContactPage() {
+  const { settings } = useSelector((state) => state.settings);
+  const { user } = useSelector((state) => state.user);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setName(user.name || "");
+      setEmail(user.email || "");
+    }
+  }, [user]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await fetch("/api/v1/inquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          message: `Subject: ${subject}\n\n${message}`,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success("Your message has been sent successfully!");
+        setSubject("");
+        setMessage("");
+      } else {
+        toast.error(data.message || "Failed to send message");
+      }
+    } catch (error) {
+      toast.error("An error occurred while sending your message");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="bg-white min-h-screen">
       <div className="bg-gray-900 py-32 relative overflow-hidden">
@@ -15,7 +62,7 @@ export default function ContactPage() {
             Contact Us
           </h1>
           <p className="text-gray-400 font-bold uppercase tracking-[0.4em] text-xs">
-            We're Here to Help You Plan Your Next Big Event
+            We're Here to Help You with Your Shopping Needs
           </p>
         </div>
       </div>
@@ -27,7 +74,7 @@ export default function ContactPage() {
             <div className="space-y-12">
                <div className="space-y-2">
                  <h4 className="text-blue-600 font-bold uppercase tracking-[0.3em] text-xs">Get in Touch</h4>
-                 <h2 className="text-3xl font-black text-gray-900 tracking-tight">Visit Our Showroom</h2>
+                 <h2 className="text-3xl font-black text-gray-900 tracking-tight">Support Channels</h2>
                </div>
 
                <div className="space-y-8">
@@ -37,7 +84,9 @@ export default function ContactPage() {
                      </div>
                      <div>
                         <h5 className="font-black text-gray-900 uppercase tracking-widest text-[10px] mb-1">Our Location</h5>
-                        <p className="text-gray-500 text-sm leading-relaxed">House 12, Road 4, Sector 7, Uttara, Dhaka-1230, Bangladesh</p>
+                        <p className="text-gray-500 text-sm leading-relaxed">
+                          {settings?.address || "House 12, Road 4, Sector 7, Uttara, Dhaka-1230, Bangladesh"}
+                        </p>
                      </div>
                   </div>
 
@@ -47,8 +96,10 @@ export default function ContactPage() {
                      </div>
                      <div>
                         <h5 className="font-black text-gray-900 uppercase tracking-widest text-[10px] mb-1">Call Us</h5>
-                        <p className="text-gray-500 text-sm leading-relaxed">+880 1516 143876</p>
-                        <p className="text-gray-400 text-xs">Mon - Fri, 9am - 6pm</p>
+                        <p className="text-gray-500 text-sm leading-relaxed">
+                          {settings?.contactPhone || "+880 1516 143876"}
+                        </p>
+                        <p className="text-gray-400 text-xs">Sat - Thu, 10am - 8pm</p>
                      </div>
                   </div>
 
@@ -58,8 +109,10 @@ export default function ContactPage() {
                      </div>
                      <div>
                         <h5 className="font-black text-gray-900 uppercase tracking-widest text-[10px] mb-1">Email Support</h5>
-                        <p className="text-gray-500 text-sm leading-relaxed">mdsorafuddin@gmail.com</p>
-                        <p className="text-gray-400 text-xs">We usually respond within 24h</p>
+                        <p className="text-gray-500 text-sm leading-relaxed">
+                          {settings?.contactEmail || "mdsorafuddin@gmail.com"}
+                        </p>
+                        <p className="text-gray-400 text-xs">Fast response within 24h</p>
                      </div>
                   </div>
 
@@ -79,13 +132,16 @@ export default function ContactPage() {
             {/* Contact Form */}
             <div className="lg:col-span-2">
                <div className="bg-white p-10 md:p-16 rounded-[3rem] shadow-2xl shadow-gray-200/50 border border-gray-100">
-                  <form className="space-y-8">
+                  <form onSubmit={handleSubmit} className="space-y-8">
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div className="space-y-2">
                            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-4">Full Name</label>
                            <input 
                              type="text" 
-                             placeholder="John Doe" 
+                             placeholder="Your Name" 
+                             value={name}
+                             onChange={(e) => setName(e.target.value)}
+                             required
                              className="w-full bg-gray-50 border-none rounded-2xl py-5 px-8 text-sm font-bold text-gray-700 outline-none focus:ring-2 focus:ring-blue-600/20 focus:bg-white transition-all"
                            />
                         </div>
@@ -93,7 +149,10 @@ export default function ContactPage() {
                            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-4">Email Address</label>
                            <input 
                              type="email" 
-                             placeholder="john@example.com" 
+                             placeholder="Your Email" 
+                             value={email}
+                             onChange={(e) => setEmail(e.target.value)}
+                             required
                              className="w-full bg-gray-50 border-none rounded-2xl py-5 px-8 text-sm font-bold text-gray-700 outline-none focus:ring-2 focus:ring-blue-600/20 focus:bg-white transition-all"
                            />
                         </div>
@@ -101,7 +160,10 @@ export default function ContactPage() {
                            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-4">Subject</label>
                            <input 
                              type="text" 
-                             placeholder="How can we help?" 
+                             placeholder="What's this about?" 
+                             value={subject}
+                             onChange={(e) => setSubject(e.target.value)}
+                             required
                              className="w-full bg-gray-50 border-none rounded-2xl py-5 px-8 text-sm font-bold text-gray-700 outline-none focus:ring-2 focus:ring-blue-600/20 focus:bg-white transition-all"
                            />
                         </div>
@@ -109,12 +171,19 @@ export default function ContactPage() {
                            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-4">Message</label>
                            <textarea 
                              placeholder="Write your message here..." 
+                             value={message}
+                             onChange={(e) => setMessage(e.target.value)}
+                             required
                              className="w-full bg-gray-50 border-none rounded-2xl py-5 px-8 text-sm font-bold text-gray-700 outline-none focus:ring-2 focus:ring-blue-600/20 focus:bg-white transition-all min-h-[150px]"
                            ></textarea>
                         </div>
                      </div>
-                     <button className="bg-blue-600 hover:bg-blue-700 text-white px-12 py-5 rounded-2xl font-black uppercase tracking-widest text-xs transition shadow-xl shadow-blue-200 flex items-center justify-center gap-3 group">
-                        Send Message
+                     <button 
+                       type="submit"
+                       disabled={loading}
+                       className="bg-blue-600 hover:bg-blue-700 text-white px-12 py-5 rounded-2xl font-black uppercase tracking-widest text-xs transition shadow-xl shadow-blue-200 flex items-center justify-center gap-3 group disabled:bg-gray-400"
+                     >
+                        {loading ? <Loader2 className="animate-spin" size={18} /> : "Send Message"}
                         <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                      </button>
                   </form>
@@ -128,9 +197,8 @@ export default function ContactPage() {
       <section className="h-[500px] bg-gray-100 grayscale opacity-50 relative overflow-hidden flex items-center justify-center">
          <div className="text-center space-y-4">
             <MapPin size={40} className="mx-auto text-gray-400" />
-            <p className="font-black text-gray-400 uppercase tracking-widest text-sm">Uttara Showroom Location</p>
+            <p className="font-black text-gray-400 uppercase tracking-widest text-sm">Store Location</p>
          </div>
-         {/* In a real scenario, embed an iframe or Google Maps component here */}
       </section>
     </div>
   );

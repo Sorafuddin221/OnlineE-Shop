@@ -5,7 +5,7 @@ const inquirySchema = new mongoose.Schema({
   product: {
     type: mongoose.Schema.ObjectId,
     ref: "Product",
-    required: true,
+    required: false,
   },
   user: {
     type: mongoose.Schema.ObjectId,
