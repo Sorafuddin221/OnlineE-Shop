@@ -108,6 +108,7 @@ export default function CartPage() {
                         <button 
                           onClick={() => deleteCartItem(item.product)}
                           className="mt-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-red-400 hover:text-red-600 transition"
+                          aria-label={`Remove ${item.name} from cart`}
                         >
                           <Trash2 size={12} />
                           Remove
@@ -124,6 +125,7 @@ export default function CartPage() {
                         <button 
                           onClick={() => decreaseQty(item.product, item.quantity)}
                           className="w-8 h-8 flex items-center justify-center bg-white rounded-lg hover:text-blue-600 transition shadow-sm"
+                          aria-label={`Decrease ${item.name} quantity`}
                         >
                           <Minus size={14} />
                         </button>
@@ -131,6 +133,7 @@ export default function CartPage() {
                         <button 
                           onClick={() => increaseQty(item.product, item.quantity, item.stock)}
                           className="w-8 h-8 flex items-center justify-center bg-white rounded-lg hover:text-blue-600 transition shadow-sm"
+                          aria-label={`Increase ${item.name} quantity`}
                         >
                           <Plus size={14} />
                         </button>

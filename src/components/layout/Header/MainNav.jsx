@@ -62,6 +62,7 @@ export default function MainNav() {
           <button 
             onClick={() => setMobileMenuOpen(true)}
             className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition"
+            aria-label="Open Mobile Menu"
           >
             <Menu size={24} className="text-gray-700" />
           </button>
@@ -79,6 +80,7 @@ export default function MainNav() {
             <Link
               href="/wishlist"
               className="hidden sm:flex flex-col items-center p-2 text-gray-600 hover:text-blue-600 transition group relative"
+              aria-label={`Wishlist (${mounted ? wishlist?.length : 0} items)`}
             >
               <Heart size={22} className={cn("group-hover:fill-blue-600 group-hover:text-blue-600 transition", mounted && wishlist?.length > 0 && "fill-blue-600 text-blue-600")} />
               <span className="text-[10px] font-medium mt-0.5 uppercase tracking-wide">Wishlist</span>
@@ -92,6 +94,7 @@ export default function MainNav() {
             <Link
               href={mounted && isAuthenticated ? "/profile" : "/login"}
               className="flex flex-col items-center p-2 text-gray-600 hover:text-blue-600 transition group"
+              aria-label={mounted && isAuthenticated ? "Profile" : "Login"}
             >
               <User size={22} className="group-hover:scale-110 transition" />
               <span className="text-[10px] font-medium mt-0.5 uppercase tracking-wide">
@@ -102,6 +105,7 @@ export default function MainNav() {
             <Link
               href="/cart"
               className="flex flex-col items-center p-2 text-gray-600 hover:text-blue-600 transition group relative"
+              aria-label={`Shopping Cart (${mounted ? cartItems?.length : 0} items)`}
             >
               <div className="relative">
                 <ShoppingCart size={22} className="group-hover:scale-110 transition" />

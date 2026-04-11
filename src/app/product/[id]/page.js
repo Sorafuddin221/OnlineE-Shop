@@ -219,34 +219,34 @@ export default function ProductDetailsPage() {
                   className="object-cover"
                   priority
                 />
-              </motion.div>
-              
-              {discount && (
-                <div className="absolute top-6 left-6 bg-blue-600 text-white text-[10px] font-black px-4 py-2 rounded-full uppercase tracking-widest shadow-xl shadow-blue-900/20 z-10">
+                </motion.div>
+
+                {discount && (
+                <div className="absolute top-6 left-6 bg-blue-600 text-white text-[9px] font-black px-4 py-2 rounded-full uppercase tracking-widest shadow-xl shadow-blue-900/20 z-10">
                   Save {discount}%
                 </div>
-              )}
+                )}
 
-              <div className="absolute bottom-6 right-6 bg-white/80 backdrop-blur-md p-3 rounded-2xl text-gray-900 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-xl border border-white/20">
+                <div className="absolute bottom-6 right-6 bg-white/80 backdrop-blur-md p-3 rounded-2xl text-gray-900 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-xl border border-white/20">
                 <Maximize2 size={20} />
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-4 gap-4">
-              {product.image.map((img, index) => (
+                </div>
+                </div>
+
+                <div className="grid grid-cols-4 gap-4">
+                {product.image.map((img, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
+                  aria-label={`View product image ${index + 1}`}
                   className={cn(
                     "relative aspect-square rounded-2xl overflow-hidden bg-gray-50 border-2 transition-all duration-500",
                     selectedImage === index ? "border-blue-600 scale-95 shadow-xl shadow-blue-100" : "border-transparent opacity-60 hover:opacity-100 hover:scale-105"
                   )}
                 >
-                  <Image src={img.url} alt={`View ${index + 1}`} fill sizes="(max-width: 1024px) 25vw, 12.5vw" className="object-cover" />
+                  <Image src={img.url} alt={`View ${index + 1}`} fill sizes="(max-width: 1024px) 25vw, 12.5vw" className="object-cover" />        
                 </button>
-              ))}
-            </div>
-          </div>
+                ))}
+                </div>          </div>
 
           {/* Product Info */}
           <div className="flex flex-col">

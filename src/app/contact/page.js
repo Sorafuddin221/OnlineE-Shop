@@ -1,5 +1,10 @@
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
 
+export const metadata = {
+  title: "Contact Us - Online Shop",
+  description: "Get in touch with Online Shop for all your decoration and event rental needs in Dhaka. We are here to help you plan your next big event.",
+};
+
 export default function ContactPage() {
   return (
     <div className="bg-white min-h-screen">

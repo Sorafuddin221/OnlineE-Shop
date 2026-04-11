@@ -1,5 +1,10 @@
 import { Users, Target, Heart, Award } from "lucide-react";
 
+export const metadata = {
+  title: "About Us - Online Shop",
+  description: "Learn more about Online Shop, the leading decoration and event rental service provider in Dhaka, Bangladesh. We bring your events to life with premium decoration since 2018.",
+};
+
 export default function AboutPage() {
   return (
     <div className="bg-white min-h-screen">

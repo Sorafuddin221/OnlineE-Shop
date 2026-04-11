@@ -58,6 +58,7 @@ export default function QuickViewModal({ product, isOpen, onClose }) {
         <button 
           onClick={onClose}
           className="absolute top-4 right-4 z-10 p-2 text-gray-400 hover:text-black transition-colors"
+          aria-label="Close Modal"
         >
           <X size={24} />
         </button>
@@ -119,6 +120,7 @@ export default function QuickViewModal({ product, isOpen, onClose }) {
                 <button 
                   onClick={decreaseQuantity}
                   className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-black transition-colors"
+                  aria-label="Decrease Quantity"
                 >
                   <Minus size={16} />
                 </button>
@@ -127,10 +129,12 @@ export default function QuickViewModal({ product, isOpen, onClose }) {
                   readOnly 
                   value={quantity}
                   className="w-12 text-center font-bold text-sm bg-transparent outline-none"
+                  aria-label="Quantity"
                 />
                 <button 
                   onClick={increaseQuantity}
                   className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-black transition-colors"
+                  aria-label="Increase Quantity"
                 >
                   <Plus size={16} />
                 </button>
@@ -140,6 +144,7 @@ export default function QuickViewModal({ product, isOpen, onClose }) {
                 onClick={addToCartHandler}
                 disabled={product.stock <= 0}
                 className="flex-1 bg-black text-white px-8 py-4 text-[11px] font-black uppercase tracking-[0.2em] hover:bg-gray-900 transition-colors disabled:bg-gray-400 flex items-center justify-center gap-3"
+                aria-label="Add to Cart"
               >
                 <ShoppingCart size={16} />
                 Add to Cart

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, ShoppingBag } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const fallbackSlides = [
   {
@@ -89,10 +90,15 @@ export default function Hero() {
           transition={{ duration: 0.7 }}
           className="absolute inset-0"
         >
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${currentSlide.image.url})` }}
-          >
+          <div className="absolute inset-0">
+            <Image
+              src={currentSlide.image.url}
+              alt={currentSlide.title}
+              fill
+              priority
+              className="object-cover"
+              sizes="100vw"
+            />
             <div className={`absolute inset-0 ${currentSlide.bgColor || "bg-black/40"} opacity-40 mix-blend-multiply`}></div>
             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
           </div>

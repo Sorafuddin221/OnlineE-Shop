@@ -70,22 +70,22 @@ export default function Footer() {
             </p>
             <div className="flex gap-4">
               {settings?.socialLinks?.facebook && (
-                <Link href={settings.socialLinks.facebook} className="p-2 bg-gray-800 rounded-lg hover:bg-blue-600 transition group">
+                <Link href={settings.socialLinks.facebook} aria-label="Follow us on Facebook" className="p-2 bg-gray-800 rounded-lg hover:bg-blue-600 transition group">
                   <Share2 size={18} className="group-hover:text-white" />
                 </Link>
               )}
               {settings?.socialLinks?.twitter && (
-                <Link href={settings.socialLinks.twitter} className="p-2 bg-gray-800 rounded-lg hover:bg-blue-400 transition group">
+                <Link href={settings.socialLinks.twitter} aria-label="Follow us on Twitter" className="p-2 bg-gray-800 rounded-lg hover:bg-blue-400 transition group">
                   <SendIcon size={18} className="group-hover:text-white" />
                 </Link>
               )}
               {settings?.socialLinks?.instagram && (
-                <Link href={settings.socialLinks.instagram} className="p-2 bg-gray-800 rounded-lg hover:bg-pink-600 transition group">
+                <Link href={settings.socialLinks.instagram} aria-label="Follow us on Instagram" className="p-2 bg-gray-800 rounded-lg hover:bg-pink-600 transition group">
                   <Camera size={18} className="group-hover:text-white" />
                 </Link>
               )}
               {settings?.socialLinks?.youtube && (
-                <Link href={settings.socialLinks.youtube} className="p-2 bg-gray-800 rounded-lg hover:bg-red-600 transition group">
+                <Link href={settings.socialLinks.youtube} aria-label="Subscribe to our YouTube channel" className="p-2 bg-gray-800 rounded-lg hover:bg-red-600 transition group">
                   <Video size={18} className="group-hover:text-white" />
                 </Link>
               )}

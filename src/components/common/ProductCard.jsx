@@ -123,6 +123,7 @@ export default function ProductCard({ product }) {
                 isWishlisted && "bg-black text-white"
               )}
               title="Add to Wishlist"
+              aria-label={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
             >
               <Heart size={18} className={cn(isWishlisted && "fill-current")} />
             </button>
@@ -130,6 +131,7 @@ export default function ProductCard({ product }) {
               onClick={openQuickView}
               className="w-10 h-10 flex items-center justify-center bg-white shadow-sm hover:bg-black hover:text-white transition-colors duration-300"
               title="Quick View"
+              aria-label="Quick View"
             >
               <Eye size={18} />
             </button>
@@ -137,6 +139,7 @@ export default function ProductCard({ product }) {
               onClick={handleShare}
               className="w-10 h-10 flex items-center justify-center bg-white shadow-sm hover:bg-black hover:text-white transition-colors duration-300"
               title="Share"
+              aria-label="Share Product"
             >
               <Share2 size={16} />
             </button>
@@ -148,6 +151,7 @@ export default function ProductCard({ product }) {
               onClick={addToCartHandler}
               disabled={product.stock <= 0}
               className="w-full bg-black/90 text-white py-3.5 text-[11px] font-black uppercase tracking-[0.2em] hover:bg-black transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              aria-label="Quick Add to Cart"
             >
               <ShoppingCart size={14} />
               Quick Add
