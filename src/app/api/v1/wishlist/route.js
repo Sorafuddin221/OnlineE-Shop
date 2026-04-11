@@ -11,12 +11,21 @@ export async function POST(request) {
       return NextResponse.json({ success: false, message: "Login to add to wishlist" }, { status: 401 });
     }
 
-    const { productId } = await request.json();
+    const body = await request.json();
+    const { productId } = body;
+
+    if (!productId) {
+      return NextResponse.json({ success: false, message: "Product ID is required" }, { status: 400 });
+    }
     
     const dbUser = await User.findById(user._id);
+    if (!dbUser) {
+      return NextResponse.json({ success: false, message: "User not found" }, { status: 404 });
+    }
+
     const wishlist = dbUser.wishlist || [];
     
-    const isWishlisted = wishlist.some(id => id.toString() === productId);
+    const isWishlisted = wishlist.some(id => id && id.toString() === productId.toString());
 
     if (isWishlisted) {
       await User.findByIdAndUpdate(user._id, {
@@ -30,6 +39,7 @@ export async function POST(request) {
       return NextResponse.json({ success: true, message: "Added to wishlist", isWishlisted: true });
     }
   } catch (error) {
+    console.error("Wishlist POST Error:", error.message);
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
 }
@@ -44,11 +54,17 @@ export async function GET() {
 
     const dbUser = await User.findById(user._id).populate({
       path: "wishlist",
-      populate: { path: "category" }
+      model: "Product",
+      populate: { path: "category", model: "Category" }
     });
 
-    return NextResponse.json({ success: true, wishlist: dbUser.wishlist });
+    if (!dbUser) {
+      return NextResponse.json({ success: false, message: "User not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true, wishlist: dbUser.wishlist || [] });
   } catch (error) {
+    console.error("Wishlist GET Error:", error.message);
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
 }
