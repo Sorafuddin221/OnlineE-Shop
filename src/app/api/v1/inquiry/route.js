@@ -19,8 +19,8 @@ export async function POST(req) {
     const userId = await getDataFromToken();
 
     const inquiry = await Inquiry.create({
-      product,
-      user: userId || undefined,
+      product: product || null,
+      user: userId || null,
       name,
       email,
       phone,

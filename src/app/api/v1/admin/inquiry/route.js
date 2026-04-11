@@ -2,9 +2,11 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
 import Inquiry from "@/models/Inquiry";
 import { getAuthenticatedUser } from "@/utils/auth";
+import sendEmail from "@/utils/sendEmail";
 
 export async function GET(req) {
-  try {
+// ... existing GET code ...
+
     await dbConnect();
     const user = await getAuthenticatedUser();
 
@@ -55,7 +57,7 @@ export async function PATCH(req) {
       updateData.status = "Responded";
     }
 
-    const inquiry = await Inquiry.findByIdAndUpdate(id, updateData, { new: true });
+    const inquiry = await Inquiry.findByIdAndUpdate(id, updateData, { new: true }).populate("product", "name");
 
     if (!inquiry) {
       return NextResponse.json(
@@ -64,9 +66,45 @@ export async function PATCH(req) {
       );
     }
 
+    // Send Email to Customer if admin replied
+    if (response) {
+      try {
+        const subject = inquiry.product 
+          ? `Reply to your inquiry about: ${inquiry.product.name}`
+          : "Reply to your message - Online Shop";
+
+        const emailMessage = `
+Dear ${inquiry.name},
+
+Thank you for reaching out to us. Here is the response to your message:
+
+Your Message:
+"${inquiry.message}"
+
+Our Response:
+"${response}"
+
+If you have any further questions, feel free to reply to this email.
+
+Best regards,
+Customer Support Team
+Online Shop
+        `;
+
+        await sendEmail({
+          email: inquiry.email,
+          subject,
+          message: emailMessage,
+        });
+      } catch (emailError) {
+        console.error("Email sending failed:", emailError.message);
+        // We still return success for the update even if email fails
+      }
+    }
+
     return NextResponse.json({
       success: true,
-      message: "Inquiry status updated",
+      message: "Inquiry status updated and reply sent to customer via email",
       inquiry,
     });
   } catch (error) {
