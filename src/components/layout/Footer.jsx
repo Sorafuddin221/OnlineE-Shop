@@ -65,7 +65,7 @@ export default function Footer() {
               )}
             </Link>
             <p className="text-sm leading-relaxed text-gray-400">
-              We provide the best decoration items for your special events at affordable prices. Renting decor has never
+              We provide the best quality products for your needs at affordable prices. Shopping has never
               been easier with our modern platform.
             </p>
             <div className="flex gap-4">
