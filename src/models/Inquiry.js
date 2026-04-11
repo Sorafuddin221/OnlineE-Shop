@@ -6,6 +6,7 @@ const inquirySchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "Product",
     required: false,
+    default: null
   },
   user: {
     type: mongoose.Schema.ObjectId,
