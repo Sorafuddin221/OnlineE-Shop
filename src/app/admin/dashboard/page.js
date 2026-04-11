@@ -22,16 +22,8 @@ import {
   Bar
 } from "recharts";
 import { getDashboardStats } from "@/services/adminService";
-
-const chartData = [
-  { name: "Jan", sales: 4000, orders: 24 },
-  { name: "Feb", sales: 3000, orders: 13 },
-  { name: "Mar", sales: 2000, orders: 98 },
-  { name: "Apr", sales: 2780, orders: 39 },
-  { name: "May", sales: 1890, orders: 48 },
-  { name: "Jun", sales: 2390, orders: 38 },
-  { name: "Jul", sales: 3490, orders: 43 },
-];
+import Link from "next/link";
+import { toast } from "react-toastify";
 
 export default function AdminDashboard() {
   const [mounted, setMounted] = useState(false);
@@ -40,9 +32,13 @@ export default function AdminDashboard() {
     ordersCount: 0,
     productsCount: 0,
     usersCount: 0,
-    outOfStockCount: 0
+    outOfStockCount: 0,
+    processingOrders: 0,
+    shippedOrders: 0,
+    deliveredOrders: 0
   });
   const [latestOrders, setLatestOrders] = useState([]);
+  const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -54,6 +50,7 @@ export default function AdminDashboard() {
         if (data.success) {
           setStats(data.stats);
           setLatestOrders(data.latestOrders);
+          setChartData(data.chartData || []);
         }
       } catch (error) {
         console.error("Failed to fetch admin stats:", error);
@@ -63,6 +60,35 @@ export default function AdminDashboard() {
     };
     fetchStats();
   }, []);
+
+  const exportReport = () => {
+    if (latestOrders.length === 0) {
+      return toast.info("No orders to export");
+    }
+
+    const headers = ["Order ID", "Customer", "Date", "Status", "Total Amount"];
+    const csvContent = [
+      headers.join(","),
+      ...latestOrders.map(order => [
+        order._id,
+        order.user?.name || "N/A",
+        new Date(order.createdAt).toLocaleDateString(),
+        order.orderStatus,
+        order.totalPrice
+      ].join(","))
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", `sales_report_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast.success("Report exported successfully");
+  };
 
   const statCards = [
     { 
@@ -116,12 +142,18 @@ export default function AdminDashboard() {
           </h2>
         </div>
         <div className="flex gap-3">
-          <button className="bg-white border border-gray-200 text-gray-700 px-5 py-2.5 rounded-xl font-bold text-xs hover:bg-gray-50 transition shadow-sm">
+          <button 
+            onClick={exportReport}
+            className="bg-white border border-gray-200 text-gray-700 px-5 py-2.5 rounded-xl font-bold text-xs hover:bg-gray-50 transition shadow-sm"
+          >
             Export Report
           </button>
-          <button className="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold text-xs hover:bg-blue-700 transition shadow-lg shadow-blue-200">
+          <Link 
+            href="/admin/product/new"
+            className="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold text-xs hover:bg-blue-700 transition shadow-lg shadow-blue-200 flex items-center justify-center"
+          >
             Create Product
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -199,10 +231,24 @@ export default function AdminDashboard() {
         <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
           <div className="flex items-center justify-between mb-8">
             <h3 className="font-black text-gray-900 tracking-tight">Orders Overview</h3>
-            <div className="flex gap-2">
+            <div className="flex gap-4">
               <div className="flex items-center gap-1.5">
-                <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Completed</span>
+                <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                  Processing ({stats.processingOrders || 0})
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                  Shipped ({stats.shippedOrders || 0})
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                  Delivered ({stats.deliveredOrders || 0})
+                </span>
               </div>
             </div>
           </div>

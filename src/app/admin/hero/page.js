@@ -31,6 +31,8 @@ export default function AdminHeroPage() {
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [bgColor, setBgColor] = useState("bg-blue-900");
+  const [shopNowUrl, setShopNowUrl] = useState("/products");
+  const [learnMoreUrl, setLearnMoreUrl] = useState("/about");
   const [active, setActive] = useState(true);
   const [order, setOrder] = useState(0);
 
@@ -57,6 +59,8 @@ export default function AdminHeroPage() {
     setDescription("");
     setImageUrl("");
     setBgColor("bg-blue-900");
+    setShopNowUrl("/products");
+    setLearnMoreUrl("/about");
     setActive(true);
     setOrder(slides.length);
     setEditingSlide(null);
@@ -69,6 +73,8 @@ export default function AdminHeroPage() {
     setDescription(slide.description);
     setImageUrl(slide.image.url);
     setBgColor(slide.bgColor);
+    setShopNowUrl(slide.shopNowUrl || "/products");
+    setLearnMoreUrl(slide.learnMoreUrl || "/about");
     setActive(slide.active);
     setOrder(slide.order);
     setShowModal(true);
@@ -83,6 +89,8 @@ export default function AdminHeroPage() {
       description,
       image: { url: imageUrl },
       bgColor,
+      shopNowUrl,
+      learnMoreUrl,
       active,
       order: parseInt(order)
     };
@@ -217,8 +225,8 @@ export default function AdminHeroPage() {
       {showModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" onClick={() => setShowModal(false)} />
-          <div className="relative bg-white w-full max-w-2xl rounded-[3rem] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
-            <div className="p-8 md:p-12">
+          <div className="relative bg-white w-full max-w-2xl rounded-[3rem] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300 max-h-[90vh] flex flex-col">
+            <div className="p-8 md:p-12 overflow-y-auto flex-1 custom-scrollbar">
               <div className="flex items-center justify-between mb-10">
                 <h3 className="text-2xl font-black text-gray-900 tracking-tight">
                   {editingSlide ? "Edit Slide" : "Create New Slide"}
@@ -275,6 +283,29 @@ export default function AdminHeroPage() {
                     className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-sm font-bold text-gray-700 outline-none focus:ring-2 focus:ring-blue-600/20 transition-all"
                     required
                   />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-4">Shop Now URL</label>
+                    <input
+                      type="text"
+                      value={shopNowUrl}
+                      onChange={(e) => setShopNowUrl(e.target.value)}
+                      placeholder="/products"
+                      className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-sm font-bold text-gray-700 outline-none focus:ring-2 focus:ring-blue-600/20 transition-all"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-4">Learn More URL</label>
+                    <input
+                      type="text"
+                      value={learnMoreUrl}
+                      onChange={(e) => setLearnMoreUrl(e.target.value)}
+                      placeholder="/about"
+                      className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-sm font-bold text-gray-700 outline-none focus:ring-2 focus:ring-blue-600/20 transition-all"
+                    />
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

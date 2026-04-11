@@ -99,7 +99,7 @@ export default function CartPage() {
                   <div key={item.product} className="p-6 grid grid-cols-1 md:grid-cols-6 items-center gap-6 group">
                     <div className="col-span-3 flex items-center gap-6">
                       <div className="relative w-24 h-24 rounded-2xl overflow-hidden bg-gray-50 border border-gray-100 shrink-0">
-                        <Image src={item.image} alt={item.name} fill className="object-cover" />
+                        <Image src={item.image} alt={item.name} fill sizes="96px" className="object-cover" />
                       </div>
                       <div className="min-w-0">
                         <Link href={`/product/${item.product}`} className="font-black text-gray-900 hover:text-blue-600 transition truncate block">
@@ -217,6 +217,7 @@ export default function CartPage() {
                 <div className="h-6 w-10 bg-gray-100 rounded text-[6px] font-bold flex items-center justify-center">VISA</div>
                 <div className="h-6 w-10 bg-gray-100 rounded text-[6px] font-bold flex items-center justify-center">MC</div>
                 <div className="h-6 w-10 bg-gray-100 rounded text-[6px] font-bold flex items-center justify-center">BKASH</div>
+                <div className="h-6 w-10 bg-gray-100 rounded text-[6px] font-bold flex items-center justify-center">ROCKET</div>
               </div>
             </div>
           </div>

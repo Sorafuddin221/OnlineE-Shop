@@ -215,6 +215,7 @@ export default function ProductDetailsPage() {
                   src={product.image[selectedImage]?.url}
                   alt={product.name}
                   fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover"
                   priority
                 />
@@ -241,7 +242,7 @@ export default function ProductDetailsPage() {
                     selectedImage === index ? "border-blue-600 scale-95 shadow-xl shadow-blue-100" : "border-transparent opacity-60 hover:opacity-100 hover:scale-105"
                   )}
                 >
-                  <Image src={img.url} alt={`View ${index + 1}`} fill className="object-cover" />
+                  <Image src={img.url} alt={`View ${index + 1}`} fill sizes="(max-width: 1024px) 25vw, 12.5vw" className="object-cover" />
                 </button>
               ))}
             </div>

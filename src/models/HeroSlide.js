@@ -29,6 +29,14 @@ const heroSlideSchema = new mongoose.Schema({
     type: String,
     default: "bg-blue-900",
   },
+  shopNowUrl: {
+    type: String,
+    default: "/products",
+  },
+  learnMoreUrl: {
+    type: String,
+    default: "/about",
+  },
   active: {
     type: Boolean,
     default: true,

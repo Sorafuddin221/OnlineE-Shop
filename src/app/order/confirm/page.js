@@ -83,7 +83,7 @@ export default function ConfirmOrderPage() {
                   <div key={item.product} className="py-6 flex items-center justify-between gap-6 group">
                     <div className="flex items-center gap-6">
                       <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-gray-50 border border-gray-100 shrink-0">
-                        <Image src={item.image} alt={item.name} fill className="object-cover" />
+                        <Image src={item.image} alt={item.name} fill sizes="64px" className="object-cover" />
                       </div>
                       <Link href={`/product/${item.product}`} className="font-bold text-gray-900 hover:text-blue-600 transition truncate block max-w-md">
                         {item.name}

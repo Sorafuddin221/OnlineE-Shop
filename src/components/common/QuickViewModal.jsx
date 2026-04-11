@@ -68,6 +68,7 @@ export default function QuickViewModal({ product, isOpen, onClose }) {
             src={(product.image && product.image[0]?.url) || "/placeholder.png"}
             alt={product.name}
             fill
+            sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover"
           />
           {discount && (

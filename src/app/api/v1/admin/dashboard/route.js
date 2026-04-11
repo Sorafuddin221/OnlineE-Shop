@@ -33,11 +33,45 @@ export async function GET() {
     // 3. Out of Stock Products
     const outOfStockCount = await Product.countDocuments({ stock: 0 });
 
-    // 4. Latest Orders (last 5)
+    // 4. Order Status Counts
+    const processingOrders = await Order.countDocuments({ orderStatus: "Processing" });
+    const shippedOrders = await Order.countDocuments({ orderStatus: "Shipped" });
+    const deliveredOrders = await Order.countDocuments({ orderStatus: "Delivered" });
+
+    // 5. Latest Orders (last 5)
     const latestOrders = await Order.find()
       .sort({ createdAt: -1 })
       .limit(5)
       .populate("user", "name email");
+
+    // 5. Monthly Sales and Orders Data (for Charts)
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const monthlyData = await Order.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: thirtyDaysAgo },
+        },
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+          sales: { $sum: "$totalPrice" },
+          orders: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { _id: 1 },
+      },
+    ]);
+
+    // Format data for the frontend chart (fill in missing days if needed, but for now just pass what we have)
+    const chartData = monthlyData.map(item => ({
+      name: item._id.split('-').slice(1).reverse().join('/'), // Format as DD/MM
+      sales: item.sales,
+      orders: item.orders
+    }));
 
     return NextResponse.json({
       success: true,
@@ -47,8 +81,12 @@ export async function GET() {
         ordersCount,
         usersCount,
         outOfStockCount,
+        processingOrders,
+        shippedOrders,
+        deliveredOrders,
       },
       latestOrders,
+      chartData
     });
   } catch (error) {
     console.error("Dashboard Stats Error:", error);

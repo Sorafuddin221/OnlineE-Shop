@@ -130,14 +130,14 @@ export default function Hero() {
                 className="flex gap-4"
               >
                 <Link
-                  href="/products"
+                  href={currentSlide.shopNowUrl || "/products"}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full font-bold transition flex items-center gap-2 shadow-lg shadow-blue-900/40"
                 >
                   <ShoppingBag size={20} />
                   Shop Now
                 </Link>
                 <Link
-                  href="/about"
+                  href={currentSlide.learnMoreUrl || "/about"}
                   className="bg-white/10 hover:bg-white/20 text-white backdrop-blur-md px-8 py-4 rounded-full font-bold transition border border-white/30"
                 >
                   Learn More

@@ -170,6 +170,10 @@ export default function PaymentPage() {
                                 <span className="text-[10px] font-black text-orange-500 uppercase">Nagad:</span>
                                 <span className="ml-2 font-bold text-gray-900 text-xs">01516143876</span>
                              </div>
+                             <div className="bg-white px-4 py-2 rounded-xl shadow-sm border border-purple-100">
+                                <span className="text-[10px] font-black text-blue-500 uppercase">Rocket:</span>
+                                <span className="ml-2 font-bold text-gray-900 text-xs">01516143876</span>
+                             </div>
                           </div>
                        </div>
 

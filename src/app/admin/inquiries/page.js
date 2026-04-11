@@ -248,7 +248,7 @@ export default function AdminInquiriesList() {
                     >
                       <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-white border border-gray-100 shrink-0 group-hover/prod:scale-110 transition-transform">
                         {item.product?.image?.[0]?.url ? (
-                          <Image src={item.product.image[0].url} alt="" fill className="object-cover" />
+                          <Image src={item.product.image[0].url} alt="" fill sizes="48px" className="object-cover" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center bg-gray-100">
                             <Package size={16} className="text-gray-400" />

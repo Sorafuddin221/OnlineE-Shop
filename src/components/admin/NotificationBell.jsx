@@ -153,6 +153,7 @@ export default function NotificationBell() {
                         src={inquiry.product.image[0].url}
                         alt={inquiry.product.name || "Product"}
                         fill
+                        sizes="64px"
                         className="object-cover"
                       />
                     ) : (

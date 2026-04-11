@@ -24,7 +24,7 @@ const benefits = [
   {
     icon: CreditCard,
     title: "Secure Payment",
-    desc: "Multiple secure payment options including bKash & Nagad.",
+    desc: "Multiple secure payment options including bKash, Nagad & Rocket.",
     color: "bg-orange-50 text-orange-600",
   },
 ];
