@@ -5,8 +5,7 @@ import { getAuthenticatedUser } from "@/utils/auth";
 import sendEmail from "@/utils/sendEmail";
 
 export async function GET(req) {
-// ... existing GET code ...
-
+  try {
     await dbConnect();
     const user = await getAuthenticatedUser();
 
